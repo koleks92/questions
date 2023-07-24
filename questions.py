@@ -1,6 +1,7 @@
 import nltk
 import sys
 import os
+import string
 
 FILE_MATCHES = 1
 SENTENCE_MATCHES = 1
@@ -72,7 +73,18 @@ def tokenize(document):
     """
     words = []
 
-    tokenized = nltk.tokenize.word_tokenize(sentence)
+    p = string.punctuation                      # Punctuaction
+    s = nltk.corpus.stopwords.words("english")  # Stopwords
+
+
+    tokenized = nltk.tokenize.word_tokenize(document)
+    for word in tokenized:
+        # Remove punctuation and stopwords
+        if word not in s and word not in p:
+            # Add lowercase
+            words.append(word.lower())
+
+    print(words)
 
 
 
