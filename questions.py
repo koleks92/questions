@@ -51,12 +51,12 @@ def load_files(directory):
     Given a directory name, return a dictionary mapping the filename of each
     `.txt` file inside that directory to the file's contents as a string.
     """
-    files = os.listdir(directory)
+    files = os.listdir(directory) # List files
     
     loaded_files = {}
 
     for file in files:
-        path = os.path.join(directory, file)
+        path = os.path.join(directory, file) # Get file path
         with open(path, 'r', encoding='utf-8') as text:
             content = text.read()
             loaded_files[file] = content
@@ -77,7 +77,7 @@ def tokenize(document):
     p = string.punctuation                      # Punctuaction
     s = nltk.corpus.stopwords.words("english")  # Stopwords
 
-
+    # Tokenize documents
     tokenized = nltk.tokenize.word_tokenize(document)
     for word in tokenized:
         # Remove punctuation and stopwords
