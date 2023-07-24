@@ -146,24 +146,17 @@ def top_files(query, files, idfs, n):
                 if w == q:
                     terms_in_doc += 1
             # Calculate td_idf for a term
-            td_idf = terms_in_doc * idfs[q]
+            if q in idfs:
+                td_idf = terms_in_doc * idfs[q]
             # Add to files total td_idf
             file_tdidf += td_idf
         top_files[f] = file_tdidf
 
-    # Sorted
-    top_files = dict(sorted(top_files.items(), key=lambda item: item[1], reverse=True))
     
-    names = []
-    count = 0
-    for file in top_files:
-        if count == n:
-            break
-        else:
-            names.append(file)
-            count += 1
-
-    return names
+    # Sort and get a list of sentences
+    files_names = list(s for s, v in sorted(top_files.items(), key=lambda item: item[1], reverse=True))
+    
+    return files_names[0:n]
 
 
 def top_sentences(query, sentences, idfs, n):
@@ -174,7 +167,27 @@ def top_sentences(query, sentences, idfs, n):
     the query, ranked according to idf. If there are ties, preference should
     be given to sentences that have a higher query term density.
     """
-    raise NotImplementedError
+    top_sen = {}
+
+    # Iterate though each sentence
+    for s in sentences:
+        s_idfs = 0          # Idf value for a current sentence
+        words_in_sen = 0    # How many words in sentence and in query
+        # Iterate through each word in query
+        for word in sentences[s]:
+            # If word in query
+            if word in query:
+                s_idfs += idfs[word]
+                words_in_sen += 1
+        if s_idfs != 0:
+            sen_length = len(sentences[s])
+            qtd = words_in_sen / sen_length # Query Term Denisty
+            top_sen[s] = (s_idfs, qtd)
+
+    # Sort and get a list of sentences
+    sen_text = list(s for s, v in sorted(top_sen.items(), key=lambda item: (item[1][0], item[1][1]), reverse=True))
+    
+    return sen_text[0:n]
 
 
 if __name__ == "__main__":
