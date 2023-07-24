@@ -100,10 +100,30 @@ def compute_idfs(documents):
     # Get number of documents
     num_of_documents = len(documents)
 
-    # Get all word
+    # Get set of all words
     all_words = []
     for d in documents:
-        print(d)
+        for word in documents[d]:
+            all_words.append(word)
+    all_words = set(all_words)
+
+    idf = {}
+
+    for word in all_words:
+        # Number of documents that cointins the word/term
+        doc_cont = 0                    
+        for d in documents:
+            if word in documents[d]:
+                doc_cont += 1
+        if doc_cont == 0:
+            # To avoid zero division (precauction, it sould not happen)
+            idf[word] = 0
+        else:
+            idf[word] = math.log(num_of_documents / doc_cont)
+    
+    return idf
+        
+    
 
 def top_files(query, files, idfs, n):
     """
