@@ -2,6 +2,7 @@ import nltk
 import sys
 import os
 import string
+import math
 
 FILE_MATCHES = 1
 SENTENCE_MATCHES = 1
@@ -56,8 +57,8 @@ def load_files(directory):
 
     for file in files:
         path = os.path.join(directory, file)
-        with open(path, 'r', encoding='utf-8') as file:
-            content = file.read()
+        with open(path, 'r', encoding='utf-8') as text:
+            content = text.read()
             loaded_files[file] = content
 
     return loaded_files
@@ -84,7 +85,7 @@ def tokenize(document):
             # Add lowercase
             words.append(word.lower())
 
-    print(words)
+    return words
 
 
 
@@ -96,8 +97,13 @@ def compute_idfs(documents):
     Any word that appears in at least one of the documents should be in the
     resulting dictionary.
     """
-    raise NotImplementedError
+    # Get number of documents
+    num_of_documents = len(documents)
 
+    # Get all word
+    all_words = []
+    for d in documents:
+        print(d)
 
 def top_files(query, files, idfs, n):
     """
