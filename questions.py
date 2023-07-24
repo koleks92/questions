@@ -55,8 +55,7 @@ def load_files(directory):
 
     for file in files:
         path = os.path.join(directory, file)
-        with open(path, 'r') as file:
-            print(file)
+        with open(path, 'r', encoding='utf-8') as file:
             content = file.read()
             loaded_files[file] = content
 
@@ -71,7 +70,10 @@ def tokenize(document):
     Process document by coverting all words to lowercase, and removing any
     punctuation or English stopwords.
     """
-    raise NotImplementedError
+    words = []
+
+    tokenized = nltk.tokenize.word_tokenize(sentence)
+
 
 
 def compute_idfs(documents):
