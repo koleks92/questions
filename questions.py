@@ -116,7 +116,7 @@ def compute_idfs(documents):
             if word in documents[d]:
                 doc_cont += 1
         if doc_cont == 0:
-            # To avoid zero division (precauction, it sould not happen)
+            # To avoid zero division (precauction, it should not happen)
             idf[word] = 0
         else:
             idf[word] = math.log(num_of_documents / doc_cont)
@@ -132,7 +132,38 @@ def top_files(query, files, idfs, n):
     to their IDF values), return a list of the filenames of the the `n` top
     files that match the query, ranked according to tf-idf.
     """
-    raise NotImplementedError
+    top_files = {}
+
+    # Interate through each document
+    for f in files:
+        file_tdidf = 0
+        # For each word in a query
+        for q in query:
+            terms_in_doc = 0
+            # For each word in document
+            for w in files[f]:
+                # If matches the word in query
+                if w == q:
+                    terms_in_doc += 1
+            # Calculate td_idf for a term
+            td_idf = terms_in_doc * idfs[q]
+            # Add to files total td_idf
+            file_tdidf += td_idf
+        top_files[f] = file_tdidf
+
+    # Sorted
+    top_files = dict(sorted(top_files.items(), key=lambda item: item[1], reverse=True))
+    
+    names = []
+    count = 0
+    for file in top_files:
+        if count == n:
+            break
+        else:
+            names.append(file)
+            count += 1
+
+    return names
 
 
 def top_sentences(query, sentences, idfs, n):
